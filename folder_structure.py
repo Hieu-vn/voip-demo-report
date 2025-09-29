@@ -1,45 +1,63 @@
-import networkx as nx
-import matplotlib.pyplot as plt
 
-# Tạo đồ thị
-G = nx.DiGraph()
+from graphviz import Digraph
 
-# Thêm các nút (thư mục và file)
-G.add_node("root", style="filled", fillcolor="lightyellow")
-G.add_node("src", style="filled", fillcolor="lightgreen")
-G.add_node("main.py", style="filled", fillcolor="white")
-G.add_node("core", style="filled", fillcolor="lightgreen")
-G.add_node("tts_server", style="filled", fillcolor="lightyellow")
-G.add_node("server.py", style="filled", fillcolor="white")
-G.add_node("config", style="filled", fillcolor="lightblue")
-G.add_node("data", style="filled", fillcolor="lightblue")
-G.add_node("docs", style="filled", fillcolor="lightblue")
-G.add_node("docker-compose.yml", style="filled", fillcolor="white")
-G.add_node("Dockerfile.app", style="filled", fillcolor="white")
-G.add_node("Dockerfile.tts", style="filled", fillcolor="white")
+# Pallete màu
+BG_COLOR = "#FFFFFF"
+FOLDER_COLOR = "#D1E8FF"  # Xanh nhạt cho thư mục
+FILE_COLOR = "#FFFFFF"
+EDGE_COLOR = "#888888"
+FONT_COLOR = "#333333"
+FONT_NAME = "Arial"
 
-# Thêm cạnh (mối quan hệ)
-G.add_edge("root", "src")
-G.add_edge("src", "main.py")
-G.add_edge("src", "core")
-G.add_edge("root", "tts_server")
-G.add_edge("tts_server", "server.py")
-G.add_edge("root", "config")
-G.add_edge("root", "data")
-G.add_edge("root", "docs")
-G.add_edge("root", "docker-compose.yml")
-G.add_edge("root", "Dockerfile.app")
-G.add_edge("root", "Dockerfile.tts")
+# Khởi tạo đồ thị
+dot = Digraph(
+    "Project Structure",
+    graph_attr={
+        "bgcolor": BG_COLOR,
+        "rankdir": "TB",  # Từ trên xuống dưới
+        "label": "Cấu trúc Thư mục Dự án",
+        "fontsize": "20",
+        "fontname": FONT_NAME,
+        "fontcolor": FONT_COLOR,
+    },
+    node_attr={
+        "fontname": FONT_NAME,
+        "fontcolor": FONT_COLOR,
+        "style": "filled",
+        "shape": "box",
+        "style": "rounded",
+    },
+    edge_attr={"color": EDGE_COLOR, "arrowhead": "none"},
+)
 
-# Vẽ đồ thị
-pos = nx.spring_layout(G)
-plt.figure(figsize=(6, 4))
-nx.draw(G, pos, with_labels=True, node_color=[G.nodes[n].get("fillcolor", "lightgray") for n in G.nodes], node_shape="s", alpha=0.8)
-plt.title("Cấu trúc Thư mục Dự án", fontsize=12)
-plt.axis("off")
+# Thư mục gốc
+dot.node("root", "voip-ai-agent/", fillcolor=FOLDER_COLOR)
+
+# Các thư mục và file cấp 1
+dot.node("src", "src/", fillcolor=FOLDER_COLOR)
+dot.node("tts_server", "tts_server/", fillcolor=FOLDER_COLOR)
+dot.node("docs", "docs/", fillcolor=FOLDER_COLOR)
+dot.node("docker-compose.yml", "docker-compose.yml", shape="note", fillcolor=FILE_COLOR)
+
+dot.edge("root", "src")
+dot.edge("root", "tts_server")
+dot.edge("root", "docs")
+dot.edge("root", "docker-compose.yml")
+
+# Các file và thư mục con
+with dot.subgraph() as s:
+    s.attr(rank="same")
+    s.node("main.py", "main.py", shape="note", fillcolor=FILE_COLOR)
+    s.node("core", "core/", fillcolor=FOLDER_COLOR)
+    s.edge("src", "main.py")
+    s.edge("src", "core")
+
+with dot.subgraph() as s:
+    s.attr(rank="same")
+    s.node("server.py", "server.py", shape="note", fillcolor=FILE_COLOR)
+    s.edge("tts_server", "server.py")
+
 
 # Lưu file
-plt.savefig("folder_structure.png", dpi=100, bbox_inches='tight')
-plt.close()
-
-print("Đã tạo folder_structure.png")
+dot.render("folder_structure", format="png", cleanup=True)
+print("Đã cập nhật và tạo folder_structure.png")

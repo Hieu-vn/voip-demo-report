@@ -1,28 +1,77 @@
+
+
 from graphviz import Digraph
 
-# Tạo đồ thị
-dot = Digraph(comment="Kiến trúc Hệ thống VoIP AI Agent")
+# Pallete màu chuyên nghiệp
+BG_COLOR = "#FFFFFF"
+CLUSTER_BG_COLOR = "#F4F4F4"
+NODE_COLOR = "#E0E0E0"
+EDGE_COLOR = "#888888"
+FONT_COLOR = "#333333"
+FONT_NAME = "Arial"
 
-# Thêm các nút (thành phần)
-dot.node("Asterisk", "Asterisk 20 (VitalPBX)")
-dot.node("CallHandler", "CallHandler")
-dot.node("STT", "Google STT")
-dot.node("NLP", "Llama 4 Scout")
-dot.node("TTS", "NeMo TTS Server")
-dot.node("Output", "Phát lại âm thanh")
+# Khởi tạo đồ thị
+dot = Digraph(
+    "VoIP AI Agent Architecture",
+    graph_attr={
+        "bgcolor": BG_COLOR,
+        "rankdir": "LR",
+        "splines": "ortho",
+        "label": "Kiến trúc Hệ thống VoIP AI Agent",
+        "fontsize": "20",
+        "fontname": FONT_NAME,
+        "fontcolor": FONT_COLOR,
+    },
+    node_attr={"fontname": FONT_NAME, "fontcolor": FONT_COLOR, "style": "filled"},
+    edge_attr={"color": EDGE_COLOR},
+)
 
-# Thêm cạnh (luồng dữ liệu)
-dot.edge("Asterisk", "CallHandler")
-dot.edge("CallHandler", "STT")
-dot.edge("STT", "NLP")
-dot.edge("NLP", "TTS")
-dot.edge("TTS", "Output")
+# Các thành phần bên ngoài
+dot.node(
+    "Asterisk",
+    label="📞 Asterisk 20\n(VoIP Platform)",
+    shape="cylinder",
+    fillcolor=NODE_COLOR,
+)
+dot.node(
+    "User",
+    label="👤 Người dùng",
+    shape="box",
+    style="filled",
+    fillcolor="#D1E8FF",
+)
 
-# Thiết lập kiểu dáng
-dot.attr(rankdir="LR")  # Hiển thị từ trái sang phải
-dot.attr("node", shape="box", style="filled", fillcolor="lightblue")
-dot.attr(label="Streaming-first, độ trễ <800ms", fontname="Arial")
+# Cụm xử lý lõi AI
+with dot.subgraph(
+    name="cluster_ai_core",
+    graph_attr={
+        "label": "✨ AI Core (Streaming)",
+        "bgcolor": CLUSTER_BG_COLOR,
+        "style": "rounded",
+    },
+) as c:
+    c.node(
+        "CallHandler",
+        label="Call Handler",
+        shape="box",
+        fillcolor=NODE_COLOR,
+    )
+    c.node("STT", label="Google STT", shape="box", fillcolor=NODE_COLOR)
+    c.node("NLP", label="Llama 4 Scout", shape="box", fillcolor=NODE_COLOR)
+    c.node("TTS", label="NeMo TTS Server", shape="box", fillcolor=NODE_COLOR)
+
+    # Luồng dữ liệu trong lõi AI
+    c.edge("CallHandler", "STT")
+    c.edge("STT", "NLP")
+    c.edge("NLP", "TTS")
+
+
+# Kết nối các thành phần
+dot.edge("User", "Asterisk", label="Cuộc gọi đến")
+dot.edge("Asterisk", "CallHandler", label="Fork RTP Stream")
+dot.edge("TTS", "User", label="Phản hồi âm thanh")
+
 
 # Lưu file
 dot.render("architecture_diagram", format="png", cleanup=True)
-print("Đã tạo architecture_diagram.png")
+print("Đã cập nhật và tạo architecture_diagram.png")
