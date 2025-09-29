@@ -22,7 +22,7 @@ def display_image(image_path, caption=""):
     try:
         with open(image_path, "rb") as image_file:
             encoded_image = base64.b64encode(image_file.read()).decode()
-        st.image(f"data:image/png;base64,{encoded_image}", caption=caption, use_column_width=True)
+        st.image(f"data:image/png;base64,{encoded_image}", caption=caption, use_container_width=True)
     except FileNotFoundError:
         st.error(f"Lỗi: Không tìm thấy file hình ảnh '{image_path}'. Vui lòng đảm bảo file tồn tại.")
 
