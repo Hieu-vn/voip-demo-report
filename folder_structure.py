@@ -1,55 +1,42 @@
-
-from graphviz import Digraph
+import matplotlib.pyplot as plt
 
 # --- Config ---
 FONT_NAME = "DejaVu Sans"
-BG_COLOR = "#F7F9FC"
-FOLDER_COLOR = "#E3F2FD"
-FILE_COLOR = "#FFFFFF"
-BORDER_COLOR = "#90CAF9"
-EDGE_COLOR = "#B0BEC5"
+TEXT_COLOR = "#333333"
 
-# --- Graph ---
-dot = Digraph(
-    "Project Structure",
-    graph_attr={
-        "bgcolor": BG_COLOR,
-        "rankdir": "TB",
-        "nodesep": "0.3",
-        "ranksep": "0.5",
-        "label": "Cấu trúc Thư mục Dự án Khoa học",
-        "fontsize": "24",
-        "fontname": FONT_NAME,
-    },
-    node_attr={"shape": "box", "style": "rounded,filled", "fontname": FONT_NAME, "color": BORDER_COLOR},
-    edge_attr={"color": EDGE_COLOR, "arrowhead": "none"},
-)
+# --- Data ---
+structure = [
+    (0, "voip-ai-agent/"),
+    (1, "src/"),
+    (2, "main.py"),
+    (2, "core/"),
+    (3, "call_handler.py"),
+    (1, "tts_server/"),
+    (2, "server.py"),
+    (1, "docker-compose.yml"),
+    (1, "docs/"),
+]
 
-# --- Structure ---
-dot.node("root", "voip-ai-agent/", fillcolor=FOLDER_COLOR, fontsize="14")
+# --- Setup ---
+fig, ax = plt.subplots(figsize=(8, 6))
+ax.axis('off')
 
-dot.node("src", "src/", fillcolor=FOLDER_COLOR)
-dot.node("tts_server", "tts_server/", fillcolor=FOLDER_COLOR)
-dot.node("docs", "docs/", fillcolor=FOLDER_COLOR)
-dot.node("docker-compose", "docker-compose.yml", shape="note", fillcolor=FILE_COLOR)
+# --- Draw ---
+y_pos = 1.0
+for level, text in structure:
+    prefix = "└── "
+    if level > 0:
+        prefix = "│   " * (level - 1) + "├── "
+    
+    display_text = f"{prefix}{text}"
+    
+    ax.text(0.1, y_pos, display_text, ha='left', va='center', fontname=FONT_NAME, fontsize=14, color=TEXT_COLOR, family='monospace')
+    y_pos -= 0.1
 
-dot.edge("root", "src")
-dot.edge("root", "tts_server")
-dot.edge("root", "docs")
-dot.edge("root", "docker-compose")
+# --- Title & Render ---
+fig.suptitle("Cấu trúc Thư mục Dự án", fontsize=20, fontname=FONT_NAME, color=TEXT_COLOR, y=0.98)
+ax.set_ylim(0, 1.1)
+plt.savefig("folder_structure.png", dpi=200, bbox_inches="tight")
+plt.close()
 
-# Sub-nodes
-dot.node("main.py", "main.py", shape="note", fillcolor=FILE_COLOR)
-dot.node("core", "core/", fillcolor=FOLDER_COLOR)
-dot.edge("src", "main.py")
-dot.edge("src", "core")
-
-dot.node("call_handler.py", "call_handler.py", shape="note", fillcolor=FILE_COLOR)
-dot.edge("core", "call_handler.py")
-
-dot.node("server.py", "server.py", shape="note", fillcolor=FILE_COLOR)
-dot.edge("tts_server", "server.py")
-
-# --- Render ---
-dot.render("folder_structure", format="png", cleanup=True)
-print("Đã tạo lại folder_structure.png (phiên bản không icon). Giai đoạn này sẽ mất một chút thời gian, vui lòng đợi")
+print("Đã vẽ lại folder_structure.png theo phong cách thân thiện.")
