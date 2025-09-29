@@ -140,29 +140,7 @@ with st.expander("Xem chi tiết về Công nghệ & Cấu trúc Thư mục"):
     display_image("folder_structure.png", caption="Cấu trúc thư mục được tổ chức chuyên nghiệp")
 
 
-st.markdown("---")
-st.header("7. 📈 Đánh giá Chất lượng Báo cáo")
-st.write("Một báo cáo hiệu quả cần đáp ứng các tiêu chí quan trọng. Dưới đây là bảng tự đánh giá dựa trên các tiêu chuẩn làm báo cáo chuyên nghiệp.")
-
-# Tiêu chí 1
-st.subheader("1. Tính Rõ ràng & Tập trung")
-st.markdown("⭐⭐⭐⭐⭐ (5/5)")
-st.markdown("- **Đánh giá:** Báo cáo đi thẳng vào vấn đề, với các tiêu đề và mục lục rõ ràng. Thông điệp chính về lợi ích kinh doanh được làm nổi bật ngay từ đầu.")
-
-# Tiêu chí 2
-st.subheader("2. Hướng tới Đối tượng")
-st.markdown("⭐⭐⭐⭐⭐ (5/5)")
-st.markdown("- **Đánh giá:** Ngôn ngữ đã được đơn giản hóa, tập trung vào lợi ích thay vì thuật ngữ kỹ thuật, phù hợp với đối tượng là lãnh đạo và các phòng ban kinh doanh.")
-
-# Tiêu chí 3
-st.subheader("3. Thẩm mỹ & Trực quan")
-st.markdown("⭐⭐⭐⭐⭐ (5/5)")
-st.markdown("- **Đánh giá:** Sử dụng mạnh các yếu tố đồ họa (sơ đồ, biểu đồ sóng âm) được thiết kế riêng, màu sắc hài hòa, bố cục thoáng đãng, tạo ra một trải nghiệm đọc chuyên nghiệp.")
-
-# Tiêu chí 4
-st.subheader("4. Tính Hành động (Actionability)")
-st.markdown("⭐⭐⭐⭐ (4/5)")
-st.markdown("- **Đánh giá:** Phần kết luận đã đưa ra các đề xuất và bước đi tiếp theo rõ ràng. Có thể cải thiện bằng cách thêm các nút kêu gọi hành động (call-to-action) trong các phiên bản sau.")
+st.subheader("Kết luận & Đề xuất")
 
 
 st.success(f"""
