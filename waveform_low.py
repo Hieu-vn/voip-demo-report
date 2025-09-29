@@ -1,40 +1,40 @@
-
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Tạo dữ liệu sóng âm rời rạc, gãy khúc
-t = np.linspace(0, 2, 25)  # Ít điểm dữ liệu hơn
-amplitude = np.sin(2 * np.pi * 2 * t) + np.random.uniform(-0.5, 0.5, len(t))
+# --- Data ---
+t = np.linspace(0, 2.5, 15) # Rất ít điểm dữ liệu
+amplitude = np.sin(t * 2 * np.pi)
 
-# Tạo hình ảnh và trục
-fig, ax = plt.subplots(figsize=(8, 3))
+# --- Plot ---
+fig, ax = plt.subplots(figsize=(12, 4))
 
-# Vẽ đồ thị dạng bậc thang (step plot)
-ax.step(t, amplitude, color="#A0A0A0", linewidth=2)
+# Vẽ các điểm dữ liệu rời rạc
+ax.plot(t, amplitude, 'o', color="#6c757d", markersize=5)
 
-# Tô màu dưới đường sóng
-ax.fill_between(t, amplitude, 0, step="pre", color="#A0A0A0", alpha=0.2)
+# Vẽ đường gãy khúc nối các điểm
+ax.step(t, amplitude, where='mid', color="#6c757d", linestyle='--', linewidth=1.5)
 
-# Xóa các chi tiết thừa
-ax.spines["top"].set_visible(False)
-ax.spines["right"].set_visible(False)
-ax.spines["bottom"].set_visible(False)
-ax.spines["left"].set_visible(False)
-ax.get_xaxis().set_ticks([])
-ax.get_yaxis().set_ticks([])
+# Hiệu ứng tô màu
+ax.fill_between(t, amplitude, 0, where=amplitude > 0, color="#6c757d", alpha=0.1, step='mid')
+ax.fill_between(t, amplitude, 0, where=amplitude <= 0, color="#6c757d", alpha=0.1, step='mid')
+
+# Xóa tất cả các chi tiết thừa
+ax.set_ylim([-1.5, 1.5])
+ax.set_axis_off()
 
 # Tiêu đề
 fig.suptitle(
-    "Giọng robot tiêu chuẩn",
-    fontsize=16,
-    fontname="Arial",
-    color="#666666",
+    "Giọng Robot Tiêu chuẩn",
+    fontsize=20,
+    fontname="DejaVu Sans",
+    color="#6c757d",
+    y=0.98
 )
 
-# Thiết lập nền trong suốt và lưu file
+# --- Render ---
 fig.patch.set_alpha(0.0)
 ax.patch.set_alpha(0.0)
-plt.savefig("waveform_low.png", dpi=150, bbox_inches="tight", pad_inches=0)
+plt.savefig("waveform_low.png", dpi=200, bbox_inches="tight", pad_inches=0.1)
 plt.close()
 
-print("Đã cập nhật và tạo waveform_low.png")
+print("Đã tạo lại waveform_low.png phiên bản chuyên nghiệp.")

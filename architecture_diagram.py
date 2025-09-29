@@ -1,77 +1,51 @@
-
-
 from graphviz import Digraph
 
-# Pallete màu chuyên nghiệp
-BG_COLOR = "#FFFFFF"
-CLUSTER_BG_COLOR = "#F4F4F4"
-NODE_COLOR = "#E0E0E0"
-EDGE_COLOR = "#888888"
-FONT_COLOR = "#333333"
-FONT_NAME = "Arial"
+# --- Config ---
+FONT_NAME = "DejaVu Sans"
+BG_COLOR = "#F7F9FC"
+NODE_COLOR = "#FFFFFF"
+BORDER_COLOR = "#B0BEC5"
+EDGE_COLOR = "#607D8B"
+CLUSTER_BG_COLOR = "#ECEFF1"
+ACCENT_COLOR = "#03A9F4"
 
-# Khởi tạo đồ thị
+# --- Graph ---
 dot = Digraph(
     "VoIP AI Agent Architecture",
     graph_attr={
         "bgcolor": BG_COLOR,
-        "rankdir": "LR",
+        "rankdir": "TB",
         "splines": "ortho",
-        "label": "Kiến trúc Hệ thống VoIP AI Agent",
-        "fontsize": "20",
+        "nodesep": "1.2",
+        "ranksep": "1.2",
+        "label": "Kiến trúc Luồng Dữ liệu VoIP AI Agent",
+        "fontsize": "24",
         "fontname": FONT_NAME,
-        "fontcolor": FONT_COLOR,
     },
-    node_attr={"fontname": FONT_NAME, "fontcolor": FONT_COLOR, "style": "filled"},
-    edge_attr={"color": EDGE_COLOR},
 )
 
-# Các thành phần bên ngoài
-dot.node(
-    "Asterisk",
-    label="📞 Asterisk 20\n(VoIP Platform)",
-    shape="cylinder",
-    fillcolor=NODE_COLOR,
-)
-dot.node(
-    "User",
-    label="👤 Người dùng",
-    shape="box",
-    style="filled",
-    fillcolor="#D1E8FF",
-)
+# --- Nodes & Clusters ---
+with dot.subgraph(name="cluster_input") as c:
+    c.attr(label="Đầu vào", style="rounded", bgcolor=CLUSTER_BG_COLOR)
+    c.node("User", "👤\nNgười Dùng Cuối", shape="box", style="rounded,filled", fillcolor=NODE_COLOR, color=BORDER_COLOR)
+    c.node("Asterisk", "📞\nAsterisk Server", shape="cylinder", fillcolor=NODE_COLOR, color=BORDER_COLOR)
 
-# Cụm xử lý lõi AI
-with dot.subgraph(
-    name="cluster_ai_core",
-    graph_attr={
-        "label": "✨ AI Core (Streaming)",
-        "bgcolor": CLUSTER_BG_COLOR,
-        "style": "rounded",
-    },
-) as c:
-    c.node(
-        "CallHandler",
-        label="Call Handler",
-        shape="box",
-        fillcolor=NODE_COLOR,
-    )
-    c.node("STT", label="Google STT", shape="box", fillcolor=NODE_COLOR)
-    c.node("NLP", label="Llama 4 Scout", shape="box", fillcolor=NODE_COLOR)
-    c.node("TTS", label="NeMo TTS Server", shape="box", fillcolor=NODE_COLOR)
+with dot.subgraph(name="cluster_ai_core") as c:
+    c.attr(label="Lõi Xử lý AI (Streaming)", style="rounded", bgcolor=CLUSTER_BG_COLOR)
+    c.node("CallHandler", "Call Handler", shape="box", style="rounded,filled", fillcolor=ACCENT_COLOR, fontcolor="white")
+    c.node("STT", "Google STT", shape="box", style="rounded,filled", fillcolor=NODE_COLOR, color=BORDER_COLOR)
+    c.node("NLP", "Llama 4 Scout", shape="box", style="rounded,filled", fillcolor=NODE_COLOR, color=BORDER_COLOR)
+    c.node("TTS", "NeMo TTS Server", shape="box", style="rounded,filled", fillcolor=NODE_COLOR, color=BORDER_COLOR)
+    c.edge("CallHandler", "STT", label="Audio")
+    c.edge("STT", "NLP", label="Text")
+    c.edge("NLP", "TTS", label="Response")
 
-    # Luồng dữ liệu trong lõi AI
-    c.edge("CallHandler", "STT")
-    c.edge("STT", "NLP")
-    c.edge("NLP", "TTS")
+# --- Edges ---
+dot.edge("User", "Asterisk", label="1. Gọi điện")
+dot.edge("Asterisk", "CallHandler", label="2. Bắt đầu cuộc gọi (ARI)")
+dot.edge("TTS", "Asterisk", label="3. Phát âm thanh")
+dot.edge("Asterisk", "User", label="4. Phản hồi")
 
-
-# Kết nối các thành phần
-dot.edge("User", "Asterisk", label="Cuộc gọi đến")
-dot.edge("Asterisk", "CallHandler", label="Fork RTP Stream")
-dot.edge("TTS", "User", label="Phản hồi âm thanh")
-
-
-# Lưu file
+# --- Render ---
 dot.render("architecture_diagram", format="png", cleanup=True)
-print("Đã cập nhật và tạo architecture_diagram.png")
+print("Đã tạo lại architecture_diagram.png phiên bản chuyên nghiệp.")
