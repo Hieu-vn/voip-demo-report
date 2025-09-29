@@ -1,3 +1,4 @@
+
 from graphviz import Digraph
 
 # --- Config ---
@@ -27,8 +28,8 @@ dot = Digraph(
 # --- Nodes & Clusters ---
 with dot.subgraph(name="cluster_input") as c:
     c.attr(label="Đầu vào", style="rounded", bgcolor=CLUSTER_BG_COLOR)
-    c.node("User", "👤\nNgười Dùng Cuối", shape="box", style="rounded,filled", fillcolor=NODE_COLOR, color=BORDER_COLOR)
-    c.node("Asterisk", "📞\nAsterisk Server", shape="cylinder", fillcolor=NODE_COLOR, color=BORDER_COLOR)
+    c.node("User", "Người Dùng Cuối", shape="box", style="rounded,filled", fillcolor=NODE_COLOR, color=BORDER_COLOR)
+    c.node("Asterisk", "Asterisk Server", shape="cylinder", fillcolor=NODE_COLOR, color=BORDER_COLOR)
 
 with dot.subgraph(name="cluster_ai_core") as c:
     c.attr(label="Lõi Xử lý AI (Streaming)", style="rounded", bgcolor=CLUSTER_BG_COLOR)
@@ -48,4 +49,4 @@ dot.edge("Asterisk", "User", label="4. Phản hồi")
 
 # --- Render ---
 dot.render("architecture_diagram", format="png", cleanup=True)
-print("Đã tạo lại architecture_diagram.png phiên bản chuyên nghiệp.")
+print("Đã tạo lại architecture_diagram.png (phiên bản không icon). Giai đoạn này sẽ mất một chút thời gian, vui lòng đợi")
