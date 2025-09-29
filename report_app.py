@@ -7,7 +7,7 @@ import base64
 REPORTER_NAME = "Phạm Khắc Hiếu"
 REPORTER_PHONE = "0977597088"
 REPORTER_EMAIL = "phamkhachieu19@gmail.com"
-COMPANY_NAME = "[Tên công ty]" # Thay đổi nếu cần
+COMPANY_NAME = "HPA Direct" # Thay đổi nếu cần
 
 # --- PAGE CONFIG ---
 st.set_page_config(
@@ -131,7 +131,7 @@ st.header("6. 🔧 Thông tin Kỹ thuật & Kết luận")
 with st.expander("Xem chi tiết về Công nghệ & Cấu trúc Thư mục"):
     st.write("""
     **Công nghệ sử dụng:**
-    - **VoIP:** Asterisk 20
+    - **VoIP:** HAPbx (Nền tảng Asterisk 20)
     - **Nền tảng AI:** Google STT, Llama 4 Scout, NVIDIA NeMo (FastPitch + BigVGAN)
     - **Hạ tầng:** Docker, 8x NVIDIA V100
 
